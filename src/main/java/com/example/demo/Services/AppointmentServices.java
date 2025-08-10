@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.example.demo.DataTransferObjects.AppointmentBookRequest;
 import com.example.demo.DataTransferObjects.AppointmentCancelRequest;
 import com.example.demo.DataTransferObjects.AppointmentResponse;
+import com.example.demo.Exception.AlreadyUpdatedException;
+import com.example.demo.Exception.ResourceNotFoundException;
 import com.example.demo.Models.Appointment;
 import com.example.demo.Models.Patient;
 import com.example.demo.Models.Status;
