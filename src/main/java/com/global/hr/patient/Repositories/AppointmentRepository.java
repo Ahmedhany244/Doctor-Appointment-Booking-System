@@ -13,11 +13,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Integer
     
     // Correcting the typo and adding FOR UPDATE
 	@Query(
-		    value = "SELECT COALESCE(MAX(patient_order), 0) FROM appointment "
+		    value = "SELECT COALESCE(MAX(patient_order), 1) FROM appointment "
 		    		+ "WHERE doctor_id = :doctorId AND appointment_day = :availableDay AND status = 'BOOKED' ",
 		    nativeQuery = true
 		)
-	Integer findMaxPatientOrder(@Param("doctorId") Integer doctorId, @Param("availableDay") Day availableDay);
+	Integer findMaxPatientOrder(@Param("doctorId") Integer doctorId, @Param("availableDay") String availableDay);
 	
 	Optional<Appointment> findByAppointmentId(Integer appointmentId);
 }

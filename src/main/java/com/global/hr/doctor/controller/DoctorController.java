@@ -8,6 +8,9 @@ import com.global.hr.doctor.entity.ExcuseId;
 import com.global.hr.doctor.service.AvailableTimeService;
 import com.global.hr.doctor.service.DoctorService;
 import com.global.hr.doctor.service.ExcuseService;
+import com.global.hr.patient.DataTransferObjects.AppointmentCancelRequest;
+import com.global.hr.patient.DataTransferObjects.AppointmentResponse;
+import com.global.hr.patient.Services.AppointmentServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,8 @@ public class DoctorController {
 	private AvailableTimeService availableservice;
 	@Autowired
 	private ExcuseService excuseservice;
+	@Autowired
+	private AppointmentServices appointementService;
 
 	// Get all doctors
 	@GetMapping
@@ -156,4 +161,13 @@ public class DoctorController {
         
         return ResponseEntity.notFound().build();
     }
+	
+	@PatchMapping("/cancelappointment")
+	public ResponseEntity<AppointmentResponse> cancelAppointment (@RequestBody AppointmentCancelRequest req){
+		AppointmentResponse response = appointementService.cancelAppointment(req);
+		
+		return new ResponseEntity<>(response,HttpStatus.OK);
+		
+		
+	}
 }

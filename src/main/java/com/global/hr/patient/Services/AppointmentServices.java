@@ -53,16 +53,19 @@ public class AppointmentServices {
 	    // 1. Get the patient first
 	    Patient patient = patientRepo.findById(req.getPatientId())
 	            .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
+	    System.out.println("DoctorId: " + req.getDoctor_id());
+	    System.out.println("AvailableDay: " + req.getAppointmentDay());
+
 
 	    // 2. Find the current max order number within this transaction
-	    int order = this.appointmentRepo.findMaxPatientOrder(req.getDoctor_id(), req.getAppointmentDay());
+	    int order = this.appointmentRepo.findMaxPatientOrder(req.getDoctor_id(), req.getAppointmentDay().name());
 
 	    // 3. Create the new appointment entity
 	    Appointment appointment = new Appointment();
 	    appointment.setPatient(patient);
 	    appointment.setDoctor_id(req.getDoctor_id());
 	    appointment.setAppointmentDay(req.getAppointmentDay());
-	    appointment.setPatientOrder(order + 1);
+	    appointment.setPatientOrder((order + 1));
 	    appointment.setStatus(Status.BOOKED);
 	    
 	    // 4. Save the new appointment
