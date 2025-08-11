@@ -1,4 +1,7 @@
 package com.global.hr.doctor.service;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -6,11 +9,7 @@ import org.springframework.stereotype.Service;
 import com.global.hr.doctor.entity.AvailableTime;
 import com.global.hr.doctor.entity.Doctor;
 import com.global.hr.doctor.repository.AvailableTimeRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-import java.util.Optional;
+import com.global.hr.patient.Models.Day;
 @Service
 public class AvailableTimeService {
 	// menf3sh final m3 auto l2n auto injection dh b3d m3 create lkn final deh w enta btcreate fi constructor
@@ -50,5 +49,10 @@ public class AvailableTimeService {
 	    public void deleteById(Integer id) {
 	        availableTimeRepository.deleteById(id);
 	    }
-
+	     
+	    public Integer DoctorMaxPatients(Integer id, Day day) {
+	    	 return this.availableTimeRepository.findMaxPatients(id, day);
+	    }
+	    
+	    
 }

@@ -1,4 +1,4 @@
-package com.global.hr.patient.Services;
+package com.global.hr.patient.Exception;
 
 import java.util.HashMap;
 import java.util.Map;

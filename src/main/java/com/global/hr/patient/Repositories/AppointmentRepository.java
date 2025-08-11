@@ -11,7 +11,7 @@ import com.global.hr.patient.Models.Day;
 
 public interface AppointmentRepository extends JpaRepository<Appointment,Integer>{
     
-    // Correcting the typo and adding FOR UPDATE
+    
 	@Query(
 		    value = "SELECT COALESCE(MAX(patient_order), 1) FROM appointment "
 		    		+ "WHERE doctor_id = :doctorId AND appointment_day = :availableDay AND status = 'BOOKED' ",

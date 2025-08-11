@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.global.hr.patient.DataTransferObjects.PatientRequest;
 import com.global.hr.patient.DataTransferObjects.PatientResponse;
+import com.global.hr.patient.Exception.ResourceNotFoundException;
 import com.global.hr.patient.Models.Patient;
 import com.global.hr.patient.Repositories.PatientRepository;
 

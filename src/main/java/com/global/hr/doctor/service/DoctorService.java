@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -56,4 +57,8 @@ public class DoctorService {
 		}
 	}
 
+	public List<Doctor> filterDoctors(String name,String specialization,
+			String gender,String address){
+		return doctorRepo.findByFilters(name, specialization, gender, address);
+	}
 }
