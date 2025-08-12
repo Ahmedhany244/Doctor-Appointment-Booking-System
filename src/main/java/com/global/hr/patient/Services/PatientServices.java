@@ -61,4 +61,11 @@ public class PatientServices {
 	    return modelMapper.map(savedPatient, PatientResponse.class);
 	}
 
+	public void deletePatientById(int id) {
+    Patient patient = patientRepo.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Patient not found with id " + id));
+    
+    patientRepo.delete(patient);
+}
+
 }
