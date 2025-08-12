@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.global.hr.patient.Models.Appointment;
-import com.global.hr.patient.Models.Day;
 
 public interface AppointmentRepository extends JpaRepository<Appointment,Integer>{
     
@@ -17,7 +16,14 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Integer
 		    		+ "WHERE doctor_id = :doctorId AND appointment_day = :availableDay AND status = 'BOOKED' ",
 		    nativeQuery = true
 		)
-	Integer findMaxPatientOrder(@Param("doctorId") Integer doctorId, @Param("availableDay") String availableDay);
+	Integer findMaxPatientOrderBooked(@Param("doctorId") Integer doctorId, @Param("availableDay") String availableDay);
+	
+	@Query(
+		    value = "SELECT MIN(patient_order) FROM appointment "
+		    		+ "WHERE doctor_id = :doctorId AND appointment_day = :availableDay AND status = 'Cancelled' ",
+		    nativeQuery = true
+		)
+	Optional<Integer> findMinPatientOrderCancelled(@Param("doctorId") Integer doctorId, @Param("availableDay") String availableDay);
 	
 	Optional<Appointment> findByAppointmentId(Integer appointmentId);
 }

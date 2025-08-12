@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ import com.global.hr.patient.DataTransferObjects.AppointmentResponse;
 import com.global.hr.patient.DataTransferObjects.PatientRequest;
 import com.global.hr.patient.DataTransferObjects.PatientResponse;
 import com.global.hr.patient.Exception.ResourceNotFoundException;
-import com.global.hr.patient.Models.Gender;
+import com.global.hr.patient.Models.Appointment;
 import com.global.hr.patient.Services.AppointmentServices;
 import com.global.hr.patient.Services.PatientServices;
 
@@ -108,8 +109,7 @@ public class PatientController {
 			List<AvailableTime> availability = availableservice.getAvailabilityByDoctor(doctor);
 			return ResponseEntity.ok(availability);
 		} else {
-			 new ResourceNotFoundException("Doctor not found");
-			 return null;
+			 throw new ResourceNotFoundException("Doctor not found");
 		}
 	}
 	@GetMapping("/filter")
@@ -120,6 +120,17 @@ public class PatientController {
 			@RequestParam(required=false) String gender
 			){
 		return docService.filterDoctors(name, specialization, gender, address);
+	}
+	
+	@GetMapping("/viewappointments/{id}")
+	public List<Appointment> viewAppointments(@PathVariable Integer id){
+		return patientService.getPatientAppointments(id);
+	}
+	
+	@DeleteMapping("/patients/{id}")
+	public ResponseEntity<String> deletePatient(@PathVariable Integer id) {
+	    patientService.deletePatient(id);
+	    return ResponseEntity.ok("Patient deleted successfully");
 	}
 	
 }

@@ -6,6 +6,7 @@ public class AppointmentBookRequest {
 	private Integer doctor_id;
 	private Integer patientId;
 	private Day appointmentDay;
+	
 	public Integer getDoctor_id() {
 		return doctor_id;
 	}

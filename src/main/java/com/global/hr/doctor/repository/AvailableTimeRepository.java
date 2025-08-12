@@ -15,6 +15,9 @@ import com.global.hr.patient.Models.Day;
 public interface AvailableTimeRepository extends JpaRepository<AvailableTime, Integer> {
 	List<AvailableTime> findByDoctor(Doctor doctor);
 	
-	@Query("select t.max_patients from availabletime t where t.doctor_id = :id and t.available_day = :day ")
-	Integer findMaxPatients(@Param("id") Integer id, @Param("day") Day day);
+	@Query(
+		    value = "SELECT t.max_patients FROM available_time as t WHERE t.doctor_id = :id AND t.available_day = :day",
+		    nativeQuery = true
+		)
+	Integer findMaxPatients(@Param("id") Integer id, @Param("day") String day);
 }

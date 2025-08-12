@@ -8,13 +8,21 @@ import org.springframework.stereotype.Service;
 
 import com.global.hr.doctor.entity.AvailableTime;
 import com.global.hr.doctor.entity.Doctor;
+import com.global.hr.doctor.entity.DoctorException;
 import com.global.hr.doctor.repository.AvailableTimeRepository;
+import com.global.hr.patient.Exception.ResourceNotFoundException;
 import com.global.hr.patient.Models.Day;
 @Service
 public class AvailableTimeService {
 	// menf3sh final m3 auto l2n auto injection dh b3d m3 create lkn final deh w enta btcreate fi constructor
 	@Autowired
 	private  AvailableTimeRepository availableTimeRepository;
+	
+	@Autowired
+	private DoctorService docService;
+	
+	@Autowired
+	private ExcuseService excuseService;
 	
 	    public AvailableTime save(AvailableTime availableTime) {
 	        return availableTimeRepository.save(availableTime);
@@ -24,7 +32,33 @@ public class AvailableTimeService {
 	        return availableTimeRepository.findAll();
 	    }
 	    public List<AvailableTime> getAvailabilityByDoctor(Doctor doctor) {
-	        return availableTimeRepository.findByDoctor(doctor);
+	        List<AvailableTime> times = availableTimeRepository.findByDoctor(doctor);
+
+	        //Get doctor excuses
+	        List<DoctorException> excuses = excuseService.getExcusesByDoctor(doctor);
+
+	        //Filter out times where doctor has an excuse
+	        return times.stream()
+	                .filter(time -> excuses.stream()
+	                    .noneMatch(excuse -> excuse.getExcuseDay().equals(time.getDayOfWeek())))
+	                .toList();
+	    }
+	    public List<AvailableTime> getAvailabilityByDoctorId(Integer id) {
+	    	
+	    	Doctor doctor = this.docService.getDoctorById(id).orElseThrow(() 
+	    			-> new ResourceNotFoundException("No Doctor with id " + id));
+	    			
+	    	
+	        List<AvailableTime> times = availableTimeRepository.findByDoctor(doctor);
+
+	        //Get doctor excuses
+	        List<DoctorException> excuses = excuseService.getExcusesByDoctor(doctor);
+
+	        //Filter out times where doctor has an excuse
+	        return times.stream()
+	                .filter(time -> excuses.stream()
+	                    .noneMatch(excuse -> excuse.getExcuseDay().equals(time.getDayOfWeek())))
+	                .toList();
 	    }
 
 	    public Optional<AvailableTime> findById(Integer id) {
@@ -50,7 +84,7 @@ public class AvailableTimeService {
 	        availableTimeRepository.deleteById(id);
 	    }
 	     
-	    public Integer DoctorMaxPatients(Integer id, Day day) {
+	    public Integer DoctorMaxPatients(Integer id, String day) {
 	    	 return this.availableTimeRepository.findMaxPatients(id, day);
 	    }
 	    

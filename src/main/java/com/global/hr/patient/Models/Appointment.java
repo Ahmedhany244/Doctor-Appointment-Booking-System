@@ -1,5 +1,7 @@
 package com.global.hr.patient.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,6 +41,7 @@ public class Appointment {
 	
     @ManyToOne
     @JoinColumn(name = "patient_id")  // the Foreign key in Appointment table
+    @JsonIgnore // prevents serializing the patient inside appointment
     private Patient patient;
     
 
