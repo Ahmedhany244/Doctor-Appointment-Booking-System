@@ -54,8 +54,8 @@ public class AdminService {
         return patientService.signUp(request);
     }
 
-    public PatientResponse updatePatient(PatientRequest request) {
-        return patientService.updateProfile(request);
+    public PatientResponse updatePatient(Integer id, PatientRequest request) {
+        return patientService.updateProfile(id, request);
     }
 
     public void deletePatient(int id) {

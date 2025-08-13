@@ -31,41 +31,41 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getAllAdmins());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteAdmin(@PathVariable int id) {
         adminService.deleteAdmin(id);
         return ResponseEntity.noContent().build();
     }
 
     // ===== Doctor Management =====
-    @PostMapping("/doctor")
+    @PostMapping("/adddoctor")
     public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor) {
         return new ResponseEntity<>(adminService.addDoctor(doctor), HttpStatus.CREATED);
     }
 
-    @PutMapping("/doctor/{id}")
+    @PutMapping("/updatedoctor/{id}")
     public ResponseEntity<Doctor> updateDoctor(@PathVariable Integer id, @RequestBody Doctor doctor) {
         return ResponseEntity.ok(adminService.updateDoctor(id, doctor));
     }
 
-    @DeleteMapping("/doctor/{id}")
+    @DeleteMapping("/deletedoctor/{id}")
     public ResponseEntity<Void> deleteDoctor(@PathVariable int id) {
         adminService.deleteDoctor(id);
         return ResponseEntity.noContent().build();
     }
 
     // ===== Patient Management =====
-    @PostMapping("/patient")
+    @PostMapping("/addpatient")
     public ResponseEntity<PatientResponse> addPatient(@RequestBody PatientRequest request) {
         return new ResponseEntity<>(adminService.addPatient(request), HttpStatus.CREATED);
     }
 
-    @PutMapping("/patient")
-    public ResponseEntity<PatientResponse> updatePatient(@RequestBody PatientRequest request) {
-        return ResponseEntity.ok(adminService.updatePatient(request));
+    @PutMapping("/updatepatient/{id}")
+    public ResponseEntity<PatientResponse> updatePatient(@PathVariable Integer id, @RequestBody PatientRequest request){
+        return ResponseEntity.ok(adminService.updatePatient(id, request));
     }
 
-    @DeleteMapping("/patient/{id}")
+    @DeleteMapping("/deletepatient/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable int id) {
         adminService.deletePatient(id);
         return ResponseEntity.noContent().build();

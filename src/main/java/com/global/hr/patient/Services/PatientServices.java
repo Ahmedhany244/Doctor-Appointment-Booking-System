@@ -66,6 +66,17 @@ public class PatientServices {
 	    return modelMapper.map(savedPatient, PatientResponse.class);
 	}
 
+
+	public PatientResponse updateProfile(Integer id,PatientRequest req ){
+		 Patient existingPatient = patientRepo.findById(id)
+	        .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
+			 modelMapper.getConfiguration().setSkipNullEnabled(true);
+	    	modelMapper.map(req, existingPatient);
+			 Patient savedPatient = patientRepo.save(existingPatient);
+			return modelMapper.map(savedPatient, PatientResponse.class);
+
+	}
+
 	public List<Appointment> getPatientAppointments(Integer id) {
 	    Patient patient = patientRepo.findById(id)
 		        .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
