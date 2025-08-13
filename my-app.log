@@ -9641,3 +9641,56 @@ java.lang.IllegalStateException: Max patients for doctor is not configured
 2025-08-13T17:45:30.235+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
 2025-08-13T17:45:30.243+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] c.g.h.DoctorAppointmentSystemApplication : Started DoctorAppointmentSystemApplication in 1.391 seconds (process running for 3430.758)
 2025-08-13T17:45:30.245+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-08-13T17:56:38.762+03:00  INFO 20336 --- [doctor-appointment-system] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 3 class path changes (0 additions, 0 deletions, 3 modifications)
+2025-08-13T17:56:38.765+03:00  INFO 20336 --- [doctor-appointment-system] [Thread-43] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-13T17:56:39.815+03:00  INFO 20336 --- [doctor-appointment-system] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-08-13T17:56:39.818+03:00  INFO 20336 --- [doctor-appointment-system] [Thread-43] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-13T17:56:39.819+03:00  INFO 20336 --- [doctor-appointment-system] [Thread-43] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Shutdown initiated...
+2025-08-13T17:56:39.825+03:00  INFO 20336 --- [doctor-appointment-system] [Thread-43] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Shutdown completed.
+2025-08-13T17:56:39.934+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] c.g.h.DoctorAppointmentSystemApplication : Starting DoctorAppointmentSystemApplication using Java 17.0.8 with PID 20336 (F:\spring boot\Doctor-Appointment-Booking-System\target\classes started by ADMIN in F:\spring boot\Doctor-Appointment-Booking-System)
+2025-08-13T17:56:39.934+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] c.g.h.DoctorAppointmentSystemApplication : No active profile set, falling back to 1 default profile: "default"
+2025-08-13T17:56:40.236+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-13T17:56:40.272+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 35 ms. Found 6 JPA repository interfaces.
+2025-08-13T17:56:40.450+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-13T17:56:40.452+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-13T17:56:40.452+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.43]
+2025-08-13T17:56:40.488+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-13T17:56:40.489+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 552 ms
+2025-08-13T17:56:40.575+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-13T17:56:40.579+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-13T17:56:40.594+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-13T17:56:40.595+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Starting...
+2025-08-13T17:56:40.619+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-12 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2e29b43b
+2025-08-13T17:56:40.619+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Start completed.
+2025-08-13T17:56:40.620+03:00  WARN 20336 --- [doctor-appointment-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-08-13T17:56:40.620+03:00  WARN 20336 --- [doctor-appointment-system] [restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-08-13T17:56:40.621+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-12)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-08-13T17:56:40.622+03:00 DEBUG 20336 --- [doctor-appointment-system] [restartedMain] o.h.t.d.sql.spi.DdlTypeRegistry          : addDescriptor(12, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@6ad99da8) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@518c5d33)
+2025-08-13T17:56:40.622+03:00 DEBUG 20336 --- [doctor-appointment-system] [restartedMain] o.h.t.d.sql.spi.DdlTypeRegistry          : addDescriptor(-9, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@704b7a30) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@35d59f2c)
+2025-08-13T17:56:40.622+03:00 DEBUG 20336 --- [doctor-appointment-system] [restartedMain] o.h.t.d.sql.spi.DdlTypeRegistry          : addDescriptor(-3, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@13c770e3) replaced previous registration(org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@2011d26d)
+2025-08-13T17:56:40.622+03:00 DEBUG 20336 --- [doctor-appointment-system] [restartedMain] o.h.t.d.sql.spi.DdlTypeRegistry          : addDescriptor(4003, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@b20a6a5) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@12957412)
+2025-08-13T17:56:40.622+03:00 DEBUG 20336 --- [doctor-appointment-system] [restartedMain] o.h.t.d.sql.spi.DdlTypeRegistry          : addDescriptor(4001, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@3afd4ecb) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@14516143)
+2025-08-13T17:56:40.622+03:00 DEBUG 20336 --- [doctor-appointment-system] [restartedMain] o.h.t.d.sql.spi.DdlTypeRegistry          : addDescriptor(4002, org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@1a4ae8e2) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@23462a5d)
+2025-08-13T17:56:40.622+03:00 DEBUG 20336 --- [doctor-appointment-system] [restartedMain] o.h.t.d.sql.spi.DdlTypeRegistry          : addDescriptor(2004, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@739da3e8) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@6cd99fa1)
+2025-08-13T17:56:40.622+03:00 DEBUG 20336 --- [doctor-appointment-system] [restartedMain] o.h.t.d.sql.spi.DdlTypeRegistry          : addDescriptor(2005, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@21197720) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@339fa59c)
+2025-08-13T17:56:40.622+03:00 DEBUG 20336 --- [doctor-appointment-system] [restartedMain] o.h.t.d.sql.spi.DdlTypeRegistry          : addDescriptor(2011, org.hibernate.type.descriptor.sql.internal.CapacityDependentDdlType@2d03d2e4) replaced previous registration(org.hibernate.type.descriptor.sql.internal.DdlTypeImpl@d077472)
+2025-08-13T17:56:40.780+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-13T17:56:40.838+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-13T17:56:41.052+03:00  WARN 20336 --- [doctor-appointment-system] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-13T17:56:41.230+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-08-13T17:56:41.250+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-13T17:56:41.257+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] c.g.h.DoctorAppointmentSystemApplication : Started DoctorAppointmentSystemApplication in 1.357 seconds (process running for 4101.773)
+2025-08-13T17:56:41.259+03:00  INFO 20336 --- [doctor-appointment-system] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-08-13T17:57:39.784+03:00  INFO 20336 --- [doctor-appointment-system] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-08-13T17:57:39.785+03:00  INFO 20336 --- [doctor-appointment-system] [Thread-47] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-08-13T17:57:40.409+03:00  INFO 20336 --- [doctor-appointment-system] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-08-13T17:57:40.411+03:00  INFO 20336 --- [doctor-appointment-system] [Thread-47] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-08-13T17:57:40.411+03:00  INFO 20336 --- [doctor-appointment-system] [Thread-47] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Shutdown initiated...
+2025-08-13T17:57:40.416+03:00  INFO 20336 --- [doctor-appointment-system] [Thread-47] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Shutdown completed.
