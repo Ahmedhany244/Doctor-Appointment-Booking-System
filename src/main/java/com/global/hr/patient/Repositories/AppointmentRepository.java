@@ -21,10 +21,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Integer
 		)
 	Integer findMaxPatientOrderBooked(@Param("doctorId") Integer doctorId, @Param("availableDay") String availableDay);
 	
+
 	@Query(
-		    value = "SELECT MIN(patient_order) FROM appointment "
-		    		+ "WHERE doctor_id = :doctorId AND appointment_day = :availableDay AND status = 'Cancelled' ",
-		    nativeQuery = true
+		    value = "SELECT MIN(a.patient_order) FROM appointment a "
+		    		+ "WHERE a.doctor_id = :doctorId AND a.appointment_day = :availableDay "
+		    		+ "AND a.status = 'CANCELLED' "
+		    		+ "AND NOT EXISTS "
+		    		+ "( SELECT 1 FROM appointment b WHERE b.doctor_id = a.doctor_id "
+		    		+ "AND b.appointment_day = a.appointment_day "
+		    		+ "AND b.patient_order = a.patient_order "
+		    		+ "AND b.status = 'BOOKED')",nativeQuery = true
 		)
 	Optional<Integer> findMinPatientOrderCancelled(@Param("doctorId") Integer doctorId, @Param("availableDay") String availableDay);
 	

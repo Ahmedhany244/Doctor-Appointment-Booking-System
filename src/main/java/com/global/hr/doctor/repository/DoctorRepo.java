@@ -11,6 +11,8 @@ import com.global.hr.doctor.entity.Doctor;
 @Repository
 public interface DoctorRepo extends JpaRepository<Doctor, Integer> {
 	
+	//use instead specification filter
+	
     @Query("SELECT d FROM Doctor d WHERE " +
             "(:name is null or d.name LIKE %:name%) AND " +
             "(:specialization is null or d.specialization = :specialization) AND " +
@@ -20,4 +22,5 @@ public interface DoctorRepo extends JpaRepository<Doctor, Integer> {
                                 @Param("specialization") String specialization,
                                 @Param("gender") String gender,
                                 @Param("address") String address);
+    
 }
