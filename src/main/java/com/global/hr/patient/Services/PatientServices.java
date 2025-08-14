@@ -97,4 +97,8 @@ public class PatientServices {
     patientRepo.delete(patient);
 }
 
+public PatientRepository getPatientRepository(){
+	return this.patientRepo;
+}
+
 }

@@ -1,5 +1,6 @@
 package com.global.hr.doctor.service;
 
+import com.global.hr.admin.Exception.DoctorNotFoundException;
 import com.global.hr.doctor.entity.Doctor;
 import com.global.hr.doctor.repository.DoctorRepo;
 
@@ -36,7 +37,7 @@ public class DoctorService {
 		if (doctorRepo.existsById(id)) {
 			doctorRepo.deleteById(id);
 		} else {
-			throw new RuntimeException("Doctor not found with id " + id);
+			throw new DoctorNotFoundException("Doctor not found with id " + id);
 		}
 	}
 
@@ -53,7 +54,7 @@ public class DoctorService {
 			existingDoctor.setGender(updatedDoctor.getGender());
 			return doctorRepo.save(existingDoctor); // save updated doctor
 		} else {
-			throw new RuntimeException("Doctor not found with id " + id);
+			throw new DoctorNotFoundException("Couldn't update doctor as no doctor with id: " + id + " is found in the database.");
 		}
 	}
 

@@ -1,15 +1,27 @@
 package com.global.hr.admin.controller;
 
+import com.global.hr.admin.DTO.AdminRequest;
+import com.global.hr.admin.DTO.AdminResponse;
 import com.global.hr.admin.entity.Admin;
 import com.global.hr.admin.service.AdminService;
 import com.global.hr.doctor.entity.Doctor;
 import com.global.hr.patient.DataTransferObjects.PatientRequest;
 import com.global.hr.patient.DataTransferObjects.PatientResponse;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+
+
+@Validated
 @RestController
 @RequestMapping("/admins")
 public class AdminController {
@@ -21,63 +33,10 @@ public class AdminController {
     }
 
     // ===== Admin CRUD =====
-    @PostMapping("/create")
-    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) {
-        return new ResponseEntity<>(adminService.createAdmin(admin), HttpStatus.CREATED);
-    }
+     @PostMapping("/")
+    public ResponseEntity<String> login(@RequestBody Admin admin) {
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<Admin>> getAllAdmins() {
-        return ResponseEntity.ok(adminService.getAllAdmins());
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteAdmin(@PathVariable int id) {
-        adminService.deleteAdmin(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    // ===== Doctor Management =====
-    @PostMapping("/adddoctor")
-    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor) {
-        return new ResponseEntity<>(adminService.addDoctor(doctor), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/updatedoctor/{id}")
-    public ResponseEntity<Doctor> updateDoctor(@PathVariable Integer id, @RequestBody Doctor doctor) {
-        return ResponseEntity.ok(adminService.updateDoctor(id, doctor));
-    }
-
-    @DeleteMapping("/deletedoctor/{id}")
-    public ResponseEntity<Void> deleteDoctor(@PathVariable int id) {
-        adminService.deleteDoctor(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    // ===== Patient Management =====
-    @PostMapping("/addpatient")
-    public ResponseEntity<PatientResponse> addPatient(@RequestBody PatientRequest request) {
-        return new ResponseEntity<>(adminService.addPatient(request), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/updatepatient/{id}")
-    public ResponseEntity<PatientResponse> updatePatient(@PathVariable Integer id, @RequestBody PatientRequest request){
-        return ResponseEntity.ok(adminService.updatePatient(id, request));
-    }
-
-    @DeleteMapping("/deletepatient/{id}")
-    public ResponseEntity<Void> deletePatient(@PathVariable int id) {
-        adminService.deletePatient(id);
-        return ResponseEntity.noContent().build();
-    }
-
-
-    @PostMapping("/")
-    public ResponseEntity<String> login(
-            @RequestParam String username,
-            @RequestParam String password) {
-
-        boolean isValid = adminService.validateAdmin(username, password);
+        boolean isValid = adminService.validateAdmin(admin.getUsername(), admin.getPassword());
 
         if (isValid) {
             return ResponseEntity.ok("Login successful");
@@ -85,4 +44,58 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<AdminResponse> createAdmin( @Valid @RequestBody  AdminRequest admin_req) {
+        
+        return new ResponseEntity<>(adminService.createAdmin(admin_req), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<AdminResponse>> getAllAdmins() {
+        return ResponseEntity.ok(adminService.getAllAdmins());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteAdmin(@NotNull @NumberFormat @Positive @PathVariable int id) {
+        adminService.deleteAdmin(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // ===== Doctor Management =====
+    @PostMapping("/addDoctor")
+    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor) {
+        return new ResponseEntity<>(adminService.addDoctor(doctor), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/updateDoctor/{id}")
+    public ResponseEntity<Doctor> updateDoctor(@NotNull @NumberFormat @Positive @PathVariable Integer id, @RequestBody Doctor doctor) {
+        return ResponseEntity.ok(adminService.updateDoctor(id, doctor));
+    }
+
+    @DeleteMapping("/deleteDoctor/{id}")
+    public ResponseEntity<Void> deleteDoctor(@PathVariable int id) {
+        adminService.deleteDoctor(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // ===== Patient Management =====
+    @PostMapping("/addPatient")
+    public ResponseEntity<PatientResponse> addPatient(@Valid @RequestBody PatientRequest request) {
+        return new ResponseEntity<>(adminService.addPatient(request), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/updatePatient/{id}")
+    public ResponseEntity<PatientResponse> updatePatient(@NotNull @NumberFormat @Positive  @PathVariable Integer id, @Valid @RequestBody PatientRequest request){
+        return ResponseEntity.ok(adminService.updatePatient(id, request));
+    }
+
+    @DeleteMapping("/deletePatient/{id}")
+    public ResponseEntity<Void> deletePatient(@NotNull @NumberFormat @Positive @PathVariable int id) {
+        adminService.deletePatient(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+   
 }
