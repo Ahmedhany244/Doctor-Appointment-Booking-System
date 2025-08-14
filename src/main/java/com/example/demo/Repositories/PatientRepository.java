@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.Models.Patient;
 
-
 @Repository
 public interface PatientRepository extends JpaRepository<Patient , Integer> {
 		boolean existsByEmail(String email);		// so email should be unique

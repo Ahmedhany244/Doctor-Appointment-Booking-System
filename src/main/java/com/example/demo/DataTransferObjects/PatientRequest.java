@@ -3,7 +3,8 @@ package com.example.demo.DataTransferObjects;
 import com.example.demo.Models.Gender;
 
 public class PatientRequest {
-	
+
+	private Integer id;
 	private String name;
 	private String phone;
 	private String email;
@@ -25,8 +26,11 @@ public class PatientRequest {
 	public Gender getGender() {
 		return gender;
 	}
-	public int getAge() {
-		return age;
+	public Integer getAge() {
+		if(age == 0)
+			return null;
+		else
+			return age;
 	}
 	public void setName(String name) {
 		this.name = name;
@@ -42,6 +46,12 @@ public class PatientRequest {
 	}
 	public void setAge(int age) {
 		this.age = age;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 

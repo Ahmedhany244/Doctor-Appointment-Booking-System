@@ -1,13 +1,18 @@
 package com.example.demo.Services;
 
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DataTransferObjects.PatientRequest;
 import com.example.demo.DataTransferObjects.PatientResponse;
+import com.example.demo.Exception.ResourceNotFoundException;
+import com.example.demo.Models.Appointment;
 import com.example.demo.Models.Patient;
 import com.example.demo.Repositories.PatientRepository;
+
 
 
 @Service
@@ -31,6 +36,7 @@ public class PatientServices {
 
 	public PatientResponse login(PatientRequest req) {
 	
+		modelMapper.getConfiguration().setSkipNullEnabled(true);
 		Patient patient = modelMapper.map(req, Patient.class);
 		
 		// should be password instead of name and should also verify passowrd 
@@ -51,7 +57,7 @@ public class PatientServices {
 		
 	}
 	public PatientResponse updateProfile(PatientRequest req) {
-	    Patient existingPatient = patientRepo.findByEmail(req.getEmail())
+	    Patient existingPatient = patientRepo.findById(req.getId())
 	        .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
 
 	    modelMapper.getConfiguration().setSkipNullEnabled(true);
@@ -60,5 +66,19 @@ public class PatientServices {
 	    Patient savedPatient = patientRepo.save(existingPatient);
 	    return modelMapper.map(savedPatient, PatientResponse.class);
 	}
+
+	public List<Appointment> getPatientAppointments(Integer id) {
+	    Patient patient = patientRepo.findById(id)
+		        .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
+		return patient.getAppointments();
+	}
+
+	public void deletePatient(Integer id) {
+	    if (!patientRepo.existsById(id)) {
+	        throw new ResourceNotFoundException("Patient with ID " + id + " not found");
+	    }
+	    patientRepo.deleteById(id);
+	}
+		
 
 }

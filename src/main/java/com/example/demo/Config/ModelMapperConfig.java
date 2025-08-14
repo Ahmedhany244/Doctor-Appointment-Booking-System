@@ -1,4 +1,4 @@
-package com.example.demo.DataTransferObjects;
+package com.example.demo.Config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
