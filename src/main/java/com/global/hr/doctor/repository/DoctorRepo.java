@@ -1,6 +1,7 @@
 package com.global.hr.doctor.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.global.hr.doctor.entity.Doctor;
+import com.global.hr.patient.Models.Patient;
 @Repository
 public interface DoctorRepo extends JpaRepository<Doctor, Integer> {
 	
@@ -22,5 +24,7 @@ public interface DoctorRepo extends JpaRepository<Doctor, Integer> {
                                 @Param("specialization") String specialization,
                                 @Param("gender") String gender,
                                 @Param("address") String address);
+
+    Optional<Doctor> findByEmailAndName(String email , String name);
     
 }

@@ -7,8 +7,11 @@ import com.global.hr.admin.Exception.DoctorNotFoundException;
 import com.global.hr.admin.Exception.DuplicateEntryException;
 import com.global.hr.admin.entity.Admin;
 import com.global.hr.admin.repository.AdminRepository;
+import com.global.hr.doctor.DTO.DoctorRequest;
+import com.global.hr.doctor.DTO.DoctorResponse;
 import com.global.hr.doctor.entity.Doctor;
 import com.global.hr.doctor.repository.AvailableTimeRepository;
+import com.global.hr.doctor.repository.DoctorRepo;
 import com.global.hr.doctor.service.AvailableTimeService;
 import com.global.hr.doctor.service.DoctorService;
 import com.global.hr.doctor.service.ExcuseService;
@@ -27,6 +30,8 @@ import java.util.Optional;
 @Service
 public class AdminService {
 
+    private final DoctorRepo doctorRepo;
+
     private final AdminRepository adminRepo;
     private final DoctorService doctorService;
     private final PatientServices patientService;
@@ -36,7 +41,7 @@ public class AdminService {
     private final ModelMapper modelMapper;
 
 
-    public AdminService(AdminRepository adminRepo, DoctorService doctorService, PatientServices patientService, AvailableTimeService avalable_time_service, ExcuseService excuseService, AppointmentServices appointmentService, ModelMapper modelMapper) {
+    public AdminService(AdminRepository adminRepo, DoctorService doctorService, PatientServices patientService, AvailableTimeService avalable_time_service, ExcuseService excuseService, AppointmentServices appointmentService, ModelMapper modelMapper, DoctorRepo doctorRepo) {
         this.adminRepo = adminRepo;
         this.doctorService = doctorService;
         this.patientService = patientService;
@@ -44,6 +49,7 @@ public class AdminService {
         this.excuseService = excuseService;
         this.appointmentService = appointmentService;
         this.modelMapper = modelMapper;
+        this.doctorRepo = doctorRepo;
     }   
 
     // ===== Admin CRUD =====
@@ -78,13 +84,16 @@ public class AdminService {
     }
 
     // ===== Doctor Management =====
-    public Doctor addDoctor(Doctor doctor) {
-       
-        return doctorService.saveDoctor(doctor);
+    public DoctorResponse addDoctor(DoctorRequest doctor_req) {
+       Doctor doctor = modelMapper.map(doctor_req, Doctor.class);
+        Doctor saved_doc =  doctorService.saveDoctor(doctor);
+        return modelMapper.map(saved_doc, DoctorResponse.class);
     }
 
-    public Doctor updateDoctor(Integer id, Doctor doctor) {
-        return doctorService.updateDoctor(id, doctor);
+    public DoctorResponse updateDoctor(Integer id, DoctorRequest doctor_req) {
+        Doctor doctor  = modelMapper.map(doctor_req, Doctor.class);
+        Doctor updated_doctor = doctorService.updateDoctor(id, doctor);
+        return modelMapper.map(updated_doctor, DoctorResponse.class );
     }
 
     public void deleteDoctor(int id) {

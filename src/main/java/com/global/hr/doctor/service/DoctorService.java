@@ -1,6 +1,7 @@
 package com.global.hr.doctor.service;
 
 import com.global.hr.admin.Exception.DoctorNotFoundException;
+import com.global.hr.admin.Exception.DuplicateEntryException;
 import com.global.hr.doctor.entity.Doctor;
 import com.global.hr.doctor.repository.DoctorRepo;
 
@@ -18,6 +19,10 @@ public class DoctorService {
 
 	// Create or update a doctor
 	public Doctor saveDoctor(Doctor doctor) {
+		Optional<Doctor> doctor_found = doctorRepo.findByEmailAndName(doctor.getEmail(), doctor.getName());
+		if (doctor_found.isPresent()){
+			throw new DuplicateEntryException("Doctor with name: "+ doctor.getName() + " and email: "+ doctor.getEmail() + " is already found in the database." );
+		}
 		return doctorRepo.save(doctor);
 	}
 

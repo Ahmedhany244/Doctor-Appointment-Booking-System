@@ -4,6 +4,8 @@ import com.global.hr.admin.DTO.AdminRequest;
 import com.global.hr.admin.DTO.AdminResponse;
 import com.global.hr.admin.entity.Admin;
 import com.global.hr.admin.service.AdminService;
+import com.global.hr.doctor.DTO.DoctorRequest;
+import com.global.hr.doctor.DTO.DoctorResponse;
 import com.global.hr.doctor.entity.Doctor;
 import com.global.hr.patient.DataTransferObjects.PatientRequest;
 import com.global.hr.patient.DataTransferObjects.PatientResponse;
@@ -34,14 +36,14 @@ public class AdminController {
 
     // ===== Admin CRUD =====
      @PostMapping("/")
-    public ResponseEntity<String> login(@RequestBody Admin admin) {
+    public ResponseEntity<String> login(@RequestBody AdminRequest admin) {
 
         boolean isValid = adminService.validateAdmin(admin.getUsername(), admin.getPassword());
 
         if (isValid) {
             return ResponseEntity.ok("Login successful");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed, Invalid credentials");
         }
     }
 
@@ -64,17 +66,17 @@ public class AdminController {
 
     // ===== Doctor Management =====
     @PostMapping("/addDoctor")
-    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor) {
-        return new ResponseEntity<>(adminService.addDoctor(doctor), HttpStatus.CREATED);
+    public ResponseEntity<DoctorResponse> addDoctor(@Valid @RequestBody DoctorRequest doctor_req) {
+        return new ResponseEntity<>(adminService.addDoctor(doctor_req), HttpStatus.CREATED);
     }
 
     @PutMapping("/updateDoctor/{id}")
-    public ResponseEntity<Doctor> updateDoctor(@NotNull @NumberFormat @Positive @PathVariable Integer id, @RequestBody Doctor doctor) {
-        return ResponseEntity.ok(adminService.updateDoctor(id, doctor));
+    public ResponseEntity<DoctorResponse> updateDoctor(@NotNull @NumberFormat @Positive @PathVariable Integer id, @Valid @RequestBody DoctorRequest doctor_req) {
+        return ResponseEntity.ok(adminService.updateDoctor(id, doctor_req));
     }
 
     @DeleteMapping("/deleteDoctor/{id}")
-    public ResponseEntity<Void> deleteDoctor(@PathVariable int id) {
+    public ResponseEntity<Void> deleteDoctor(@NotNull @NumberFormat @Positive @PathVariable int id) {
         adminService.deleteDoctor(id);
         return ResponseEntity.noContent().build();
     }
