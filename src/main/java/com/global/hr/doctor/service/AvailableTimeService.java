@@ -87,6 +87,9 @@ public class AvailableTimeService {
 	    public Integer DoctorMaxPatients(Integer id, String day) {
 	    	 return this.availableTimeRepository.findMaxPatients(id, day);
 	    }
+		public void deleteAllRecordsByDoctorId(Integer id){
+			availableTimeRepository.removeByDoctor(id);
+		}
 	    
 	    
 }

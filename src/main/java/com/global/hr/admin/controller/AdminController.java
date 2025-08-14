@@ -26,7 +26,7 @@ public class AdminController {
         return new ResponseEntity<>(adminService.createAdmin(admin), HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<Admin>> getAllAdmins() {
         return ResponseEntity.ok(adminService.getAllAdmins());
     }
@@ -69,5 +69,20 @@ public class AdminController {
     public ResponseEntity<Void> deletePatient(@PathVariable int id) {
         adminService.deletePatient(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PostMapping("/")
+    public ResponseEntity<String> login(
+            @RequestParam String username,
+            @RequestParam String password) {
+
+        boolean isValid = adminService.validateAdmin(username, password);
+
+        if (isValid) {
+            return ResponseEntity.ok("Login successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
     }
 }

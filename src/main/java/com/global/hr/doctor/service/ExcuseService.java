@@ -30,6 +30,10 @@ public class ExcuseService {
     public Optional<DoctorException> getExcusesById(ExcuseId id) {
         return excuseRepository.findById(id);
     }
-    
+
+    public void deleteAllRecordsByDoctorId(Integer id )
+    {
+         excuseRepository.removeByDoctor(id);
+    }    
 
 }

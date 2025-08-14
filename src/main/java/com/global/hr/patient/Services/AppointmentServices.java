@@ -118,4 +118,13 @@ public class AppointmentServices {
 	    }
 	    return modelMapper.map(savedAppointment, AppointmentResponse.class);
 	}
+
+
+	public void deleteAllRecordsByDoctorId(Integer id ){
+		appointmentRepo.removeByDoctor(id);
+	}
+
+	public void deleteAllRecordsByPatient(Integer id){
+		appointmentRepo.removeByPatient(id);
+	}
 }

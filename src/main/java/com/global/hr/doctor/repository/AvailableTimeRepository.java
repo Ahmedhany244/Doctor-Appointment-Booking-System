@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import com.global.hr.doctor.entity.AvailableTime;
 import com.global.hr.doctor.entity.Doctor;
 import com.global.hr.patient.Models.Day;
+
+import jakarta.transaction.Transactional;
 
 @Repository
 public interface AvailableTimeRepository extends JpaRepository<AvailableTime, Integer> {
@@ -20,4 +23,12 @@ public interface AvailableTimeRepository extends JpaRepository<AvailableTime, In
 		    nativeQuery = true
 		)
 	Integer findMaxPatients(@Param("id") Integer id, @Param("day") String day);
+
+	@Modifying
+	@Transactional
+	@Query(
+		value = "DELETE FROM available_time WHERE doctor_id = :doctor_id",
+		nativeQuery = true
+	)
+	void removeByDoctor(@Param("doctor_id") Integer doctor_id);
 }
