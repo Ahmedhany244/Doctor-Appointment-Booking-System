@@ -11,6 +11,10 @@ import com.global.hr.doctor.service.DoctorService;
 import com.global.hr.doctor.service.ExcuseService;
 import com.global.hr.patient.DataTransferObjects.AppointmentCancelRequest;
 import com.global.hr.patient.DataTransferObjects.AppointmentResponse;
+import com.global.hr.patient.DataTransferObjects.AvailabilityRequest;
+import com.global.hr.patient.DataTransferObjects.AvailabilityResponse;
+import com.global.hr.patient.DataTransferObjects.DoctorExceptionRequestDTO;
+import com.global.hr.patient.DataTransferObjects.DoctorExceptionResponseDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,102 +57,58 @@ public class DoctorController {
 	}
 
 	@PostMapping("/{id}/availability")
-	public ResponseEntity<AvailableTime> addavailabletime(@PathVariable Integer id,
-			@RequestBody AvailableTime availabletime) {
-		Optional<Doctor> doctorOpt = doctorService.getDoctorById(id);
+	public ResponseEntity<AvailabilityResponse> addAvailableTime(
+	        @PathVariable Integer id,
+	        @RequestBody AvailabilityRequest requestDTO) {
 
-		if (doctorOpt.isPresent()) {
-			availabletime.setDoctor(doctorOpt.get());
-			AvailableTime saved = availableservice.save(availabletime);
-			return ResponseEntity.status(HttpStatus.CREATED).body(saved);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		AvailabilityResponse responseDTO = availableservice.addAvailableTime(id, requestDTO);
+	    return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
 	}
 
-	@PutMapping("/availability/{id}")
-	public ResponseEntity<AvailableTime> updateAvailableTime(@PathVariable Integer id,
-			@RequestBody AvailableTime availableTime) {
+	@PostMapping("/availability/{id}")
+	public ResponseEntity<AvailabilityResponse> updateAvailableTime(@PathVariable Integer id,
+			@RequestBody AvailabilityRequest availableTime) {
 		return availableservice.updateAvailabletime(id, availableTime);
 
 	}
 
 	@DeleteMapping("/availability/{id}")
 	public ResponseEntity<Void> deleteAvailableTime(@PathVariable Integer id) {
-		if (availableservice.findById(id).isPresent()) {
-			availableservice.deleteById(id);
-			return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.notFound().build();
+			 return availableservice.deleteById(id);
+			
+		
 	}
 
 	@GetMapping("/{id}/availability")
-	public ResponseEntity<List<AvailableTime>> getDoctorAvailability(@PathVariable Integer id) {
-		Optional<Doctor> doctorOptional = doctorService.getDoctorById(id);
+    public ResponseEntity<List<AvailabilityResponse>> getDoctorAvailability(@PathVariable Integer id) {
+        List<AvailabilityResponse> availability = availableservice.getDoctorAvailability(id);
+        return ResponseEntity.ok(availability);
+    }
 
-		if (doctorOptional.isPresent()) {
-			Doctor doctor = doctorOptional.get();
-			List<AvailableTime> availability = availableservice.getAvailabilityByDoctor(doctor);
-			return ResponseEntity.ok(availability);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
 
 	@PostMapping("/{doctorId}/excuses")
-	public ResponseEntity<DoctorException> addExcuse(@PathVariable Integer doctorId,
-			@RequestBody DoctorException excuse) {
-		Optional<Doctor> doctorOptional = doctorService.getDoctorById(doctorId);
+	public ResponseEntity<DoctorExceptionResponseDTO> addExcuse(
+	        @PathVariable Integer doctorId,
+	        @RequestBody DoctorExceptionRequestDTO request) {
 
-		if (doctorOptional.isPresent()) {
-			Doctor doctor = doctorOptional.get();
-			// Create the composite key properly
-			if (excuse.getId() == null) {
-				excuse.setId(new ExcuseId());
-			}
-
-			// Set the doctor ID in the composite key
-			excuse.getId().setDoctorid(doctorId);
-
-			// Ensure excuseDay is set (this should come from request body)
-			if (excuse.getId().getExcuseDay() == null) {
-				return ResponseEntity.badRequest().build(); // or throw exception
-			}
-
-			excuse.setDoctor(doctor);
-			DoctorException saved = excuseservice.save(excuse);
-			return ResponseEntity.status(HttpStatus.CREATED).body(saved);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	    DoctorExceptionResponseDTO response = excuseservice.addExcuse(doctorId, request);
+	    return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@DeleteMapping("/excuses/{doctorId}/{excuseDay}")
 	public ResponseEntity<Void> deleteExcuse(@PathVariable Integer doctorId, @PathVariable DayOfWeek excuseDay) {
 
 		ExcuseId excuseId = new ExcuseId(doctorId, excuseDay);
-
-		if (excuseservice.getExcusesById(excuseId).isPresent()) {
-			excuseservice.delete(excuseId);
-			return ResponseEntity.noContent().build();
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+			return excuseservice.delete(excuseId);
+			
+		
 	}
 
 	@GetMapping("/{doctorId}/excuses")
-	public ResponseEntity<List<DoctorException>> getExcuses(@PathVariable Integer doctorId) {
-		Optional<Doctor> doctorOptional = doctorService.getDoctorById(doctorId);
-		if (doctorOptional.isPresent()) {
-			Doctor doctor = doctorOptional.get();
-			List<DoctorException> excuses = excuseservice.getExcusesByDoctor(doctor);
-			return ResponseEntity.ok(excuses);
-
-		}
-
-		return ResponseEntity.notFound().build();
-	}
-
+    public ResponseEntity<List<DoctorExceptionResponseDTO>> getExcuses(@PathVariable Integer doctorId) {
+        List<DoctorExceptionResponseDTO> excuses = excuseservice.getExcusesByDoctorId(doctorId);
+        return ResponseEntity.ok(excuses);
+    }
 	@PatchMapping("/cancelappointment")
 	public ResponseEntity<AppointmentResponse> cancelAppointment(@RequestBody AppointmentCancelRequest req) {
 		AppointmentResponse response = appointementclientService.deleteAppointment(req);
