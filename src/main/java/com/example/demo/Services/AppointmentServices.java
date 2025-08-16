@@ -12,6 +12,7 @@ import com.example.demo.DataTransferObjects.AppointmentResponse;
 import com.example.demo.Exception.AlreadyUpdatedException;
 import com.example.demo.Exception.ResourceNotFoundException;
 import com.example.demo.Models.Appointment;
+import com.example.demo.Models.Doctor;
 import com.example.demo.Models.Patient;
 import com.example.demo.Models.Status;
 import com.example.demo.Repositories.AppointmentRepository;
@@ -26,12 +27,14 @@ public class AppointmentServices {
 	private final ModelMapper modelMapper;
 	private final PatientRepository patientRepo;
 	private static final Logger logger = LoggerFactory.getLogger(AppointmentServices.class);
+	private final DoctorClient docClient;
 	
 	public AppointmentServices(AppointmentRepository appointmentRepo,ModelMapper modelMapper
-			, PatientRepository patientRepo) {
+			, PatientRepository patientRepo, DoctorClient docClient) {
 		this.appointmentRepo = appointmentRepo;
 		this.modelMapper = modelMapper;
 		this.patientRepo = patientRepo;
+		this.docClient = docClient;
 		
 	}
 	
@@ -58,10 +61,18 @@ public class AppointmentServices {
 	            .orElseThrow(() -> new ResourceNotFoundException("Patient not found"));
 	    
 	    //2- SHOULD ENSURE DOCTOR EXISTS FROM DOCTOR-SERVICE
+	    Doctor doctor = docClient.findDoctorById(req.getDoctor_id());
+	    if(doctor == null){
+	    	throw new ResourceNotFoundException("Doctor not found");
+	    }
+	   
+		// 3- SHOULD ENSURE MAXPATIENTS OF DOCTOR ,  RETURN FROM DOCTOR-SERVICE
+	    Integer maxPatients = this.docClient.findMaxPatientOrder(req.getDoctor_id(), req.getAppointmentDay());
+	    if(maxPatients == null) {
+	    	throw new ResourceNotFoundException("max patients isnot configured");
+	    }
 	    
-	    int maxPatients = 3;	// hardcoded for now SHOULD RETURN FROM DOCTOR-SERVICE
-	    
-	    // 3. Get current order number
+	    // 4. Get current order number
 	    int order = this.appointmentRepo.findMaxPatientOrderBooked(req.getDoctor_id(), req.getAppointmentDay().toString());
 	    if (order >= maxPatients) {
 		    int cancelledOrder = this.appointmentRepo.findMinPatientOrderCancelled(req.getDoctor_id(),
@@ -72,9 +83,9 @@ public class AppointmentServices {
 	    }
 	    logger.info("patient order = " + order);
 	    
-	    //5- SHOULD ENSURE THERE IS NO SIMILAR RECORD FROM APPOINTMENTS INSTEAD OF DEPENDING ON DATABASE
+	    // 5- SHOULD ENSURE THERE IS NO SIMILAR RECORD FROM APPOINTMENTS INSTEAD OF DEPENDING ON DATABASE
 	    
-	    // 4. Create the new appointment entity
+	    // 6. Create the new appointment entity
 	    Appointment appointment = new Appointment();
 	    appointment.setPatient(patient);
 	    appointment.setDoctor_id(req.getDoctor_id());
@@ -84,7 +95,7 @@ public class AppointmentServices {
 	    
 	    Appointment savedAppointment;
 	    try {
-	    	// 5. Save the new appointment   
+	    	// 7. Save the new appointment   
 	    	 savedAppointment = this.appointmentRepo.save(appointment);
 	    }
 	    catch(DataIntegrityViolationException e) {
