@@ -2,25 +2,24 @@ package com.global.hr.admin.controller;
 
 import com.global.hr.admin.DTO.AdminRequest;
 import com.global.hr.admin.DTO.AdminResponse;
-import com.global.hr.admin.entity.Admin;
+import com.global.hr.admin.DTO.DoctorRequest;
+import com.global.hr.admin.DTO.DoctorResponse;
+import com.global.hr.admin.DTO.PatientRequest;
+import com.global.hr.admin.DTO.PatientResponse;
+import com.global.hr.admin.Security.JwtUtil;
 import com.global.hr.admin.service.AdminService;
-import com.global.hr.doctor.DTO.DoctorRequest;
-import com.global.hr.doctor.DTO.DoctorResponse;
-import com.global.hr.doctor.entity.Doctor;
-import com.global.hr.patient.DataTransferObjects.PatientRequest;
-import com.global.hr.patient.DataTransferObjects.PatientResponse;
+
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
+import java.util.List;
 
 
 @Validated
@@ -29,18 +28,23 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
+     private final JwtUtil jwtUtil;
 
-    public AdminController(AdminService adminService) {
+
+
+    public AdminController(AdminService adminService, JwtUtil jwtUtil) {
         this.adminService = adminService;
+        this.jwtUtil = jwtUtil;
     }
 
     // ===== Admin CRUD =====
-     @PostMapping("/")
+     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AdminRequest admin) {
 
         boolean isValid = adminService.validateAdmin(admin.getUsername(), admin.getPassword());
 
         if (isValid) {
+             jwtUtil.generateToken(admin.getUsername());
             return ResponseEntity.ok("Login successful");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed, Invalid credentials");
@@ -65,6 +69,13 @@ public class AdminController {
     }
 
     // ===== Doctor Management =====
+
+    // @GetMapping("/getDoctor/{id}")
+    // public ResponseEntity<DoctorResponse> getAllDoctors(@NotNull @NumberFormat @Positive @PathVariable Integer id) {
+    //     DoctorResponse doctor = restTemplate.getForObject("http://localhost:8081/doctors/6" + id, DoctorResponse.class);
+    //      return new ResponseEntity<>( doctor , HttpStatus.CREATED);
+    // }
+    
     @PostMapping("/addDoctor")
     public ResponseEntity<DoctorResponse> addDoctor(@Valid @RequestBody DoctorRequest doctor_req) {
         return new ResponseEntity<>(adminService.addDoctor(doctor_req), HttpStatus.CREATED);
@@ -87,9 +98,9 @@ public class AdminController {
         return new ResponseEntity<>(adminService.addPatient(request), HttpStatus.CREATED);
     }
 
-    @PutMapping("/updatePatient/{id}")
-    public ResponseEntity<PatientResponse> updatePatient(@NotNull @NumberFormat @Positive  @PathVariable Integer id, @Valid @RequestBody PatientRequest request){
-        return ResponseEntity.ok(adminService.updatePatient(id, request));
+    @PutMapping("/updatePatient")
+    public ResponseEntity<PatientResponse> updatePatient( @Valid @RequestBody PatientRequest request){
+        return ResponseEntity.ok(adminService.updatePatient(request));
     }
 
     @DeleteMapping("/deletePatient/{id}")

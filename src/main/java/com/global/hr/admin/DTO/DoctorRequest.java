@@ -1,8 +1,8 @@
-package com.global.hr.doctor.DTO;
+package com.global.hr.admin.DTO;
 
 import org.springframework.format.annotation.NumberFormat;
 
-import com.global.hr.patient.Models.Gender;
+import com.global.hr.admin.entity.Gender;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

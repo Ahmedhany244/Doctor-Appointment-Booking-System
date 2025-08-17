@@ -1,4 +1,4 @@
-package com.global.hr.patient.Exception;
+package com.global.hr.admin.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

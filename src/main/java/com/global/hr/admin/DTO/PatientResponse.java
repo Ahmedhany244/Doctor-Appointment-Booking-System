@@ -1,9 +1,9 @@
-package com.global.hr.patient.DataTransferObjects;
+package com.global.hr.admin.DTO;
 
 import java.util.List;
 
-import com.global.hr.patient.Models.Appointment;
-import com.global.hr.patient.Models.Gender;
+
+import com.global.hr.admin.entity.Gender;
 
 public class PatientResponse {
 	
@@ -12,7 +12,7 @@ public class PatientResponse {
 	private String email;
 	private Gender gender;
 	private int age;
-	private List<Appointment> appointments;
+	
 	
 	public String getName() {
 		return name;
@@ -43,12 +43,6 @@ public class PatientResponse {
 	}
 	public void setAge(int age) {
 		this.age = age;
-	}
-	public List<Appointment> getAppointments() {
-		return appointments;
-	}
-	public void setAppointments(List<Appointment> appointments) {
-		this.appointments = appointments;
 	}
 
 	// should remove password

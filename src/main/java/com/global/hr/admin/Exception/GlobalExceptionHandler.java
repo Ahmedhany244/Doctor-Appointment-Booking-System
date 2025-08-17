@@ -1,4 +1,4 @@
-package com.global.hr.patient.Exception;
+package com.global.hr.admin.Exception;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -15,10 +15,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
-import com.global.hr.admin.Exception.AdminNotFoundException;
-import com.global.hr.admin.Exception.DoctorNotFoundException;
-import com.global.hr.admin.Exception.DuplicateEntryException;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;

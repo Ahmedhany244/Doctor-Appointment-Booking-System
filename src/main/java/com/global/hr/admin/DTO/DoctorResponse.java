@@ -1,4 +1,4 @@
-package com.global.hr.doctor.DTO;
+package com.global.hr.admin.DTO;
 
 public class DoctorResponse {
      private String name;

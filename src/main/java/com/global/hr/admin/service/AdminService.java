@@ -1,56 +1,46 @@
 package com.global.hr.admin.service;
 
+import com.global.hr.admin.Clients.DoctorClient;
+import com.global.hr.admin.Clients.PatientClient;
 import com.global.hr.admin.DTO.AdminRequest;
 import com.global.hr.admin.DTO.AdminResponse;
+import com.global.hr.admin.DTO.DoctorRequest;
+import com.global.hr.admin.DTO.DoctorResponse;
+import com.global.hr.admin.DTO.PatientRequest;
+import com.global.hr.admin.DTO.PatientResponse;
 import com.global.hr.admin.Exception.AdminNotFoundException;
-import com.global.hr.admin.Exception.DoctorNotFoundException;
 import com.global.hr.admin.Exception.DuplicateEntryException;
 import com.global.hr.admin.entity.Admin;
 import com.global.hr.admin.repository.AdminRepository;
-import com.global.hr.doctor.DTO.DoctorRequest;
-import com.global.hr.doctor.DTO.DoctorResponse;
-import com.global.hr.doctor.entity.Doctor;
-import com.global.hr.doctor.repository.AvailableTimeRepository;
-import com.global.hr.doctor.repository.DoctorRepo;
-import com.global.hr.doctor.service.AvailableTimeService;
-import com.global.hr.doctor.service.DoctorService;
-import com.global.hr.doctor.service.ExcuseService;
-import com.global.hr.patient.DataTransferObjects.PatientRequest;
-import com.global.hr.patient.DataTransferObjects.PatientResponse;
-import com.global.hr.patient.Exception.ResourceNotFoundException;
-import com.global.hr.patient.Models.Patient;
-import com.global.hr.patient.Services.AppointmentServices;
-import com.global.hr.patient.Services.PatientServices;
+
+
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class AdminService {
 
-    private final DoctorRepo doctorRepo;
+   
 
     private final AdminRepository adminRepo;
-    private final DoctorService doctorService;
-    private final PatientServices patientService;
-    private final AvailableTimeService avalable_time_service;
-    private final ExcuseService excuseService;
-    private final AppointmentServices appointmentService;
     private final ModelMapper modelMapper;
+    private final PatientClient patientClient;
+    private final DoctorClient doctorClient;
 
 
-    public AdminService(AdminRepository adminRepo, DoctorService doctorService, PatientServices patientService, AvailableTimeService avalable_time_service, ExcuseService excuseService, AppointmentServices appointmentService, ModelMapper modelMapper, DoctorRepo doctorRepo) {
+   public AdminService(AdminRepository adminRepo, 
+                        ModelMapper modelMapper,
+                        PatientClient patientClient,
+                        DoctorClient doctorClient) {
         this.adminRepo = adminRepo;
-        this.doctorService = doctorService;
-        this.patientService = patientService;
-        this.avalable_time_service = avalable_time_service;
-        this.excuseService = excuseService;
-        this.appointmentService = appointmentService;
         this.modelMapper = modelMapper;
-        this.doctorRepo = doctorRepo;
-    }   
+        this.patientClient = patientClient;
+        this.doctorClient = doctorClient;
+    }
+
 
     // ===== Admin CRUD =====
 
@@ -85,47 +75,53 @@ public class AdminService {
 
     // ===== Doctor Management =====
     public DoctorResponse addDoctor(DoctorRequest doctor_req) {
-       Doctor doctor = modelMapper.map(doctor_req, Doctor.class);
-        Doctor saved_doc =  doctorService.saveDoctor(doctor);
-        return modelMapper.map(saved_doc, DoctorResponse.class);
+    //    Doctor doctor = modelMapper.map(doctor_req, Doctor.class);
+    //     Doctor saved_doc =  doctorService.saveDoctor(doctor);
+    //     return modelMapper.map(saved_doc, DoctorResponse.class);
+    return doctorClient.addDoctor(doctor_req);
     }
 
     public DoctorResponse updateDoctor(Integer id, DoctorRequest doctor_req) {
-        Doctor doctor  = modelMapper.map(doctor_req, Doctor.class);
-        Doctor updated_doctor = doctorService.updateDoctor(id, doctor);
-        return modelMapper.map(updated_doctor, DoctorResponse.class );
+        // Doctor doctor  = modelMapper.map(doctor_req, Doctor.class);
+        // Doctor updated_doctor = doctorService.updateDoctor(id, doctor);
+        // return modelMapper.map(updated_doctor, DoctorResponse.class );
+        return doctorClient.updateDoctor(id, doctor_req);
     }
 
     public void deleteDoctor(int id) {
 
-        Optional<Doctor> doctor = doctorService.getDoctorById(id);
-        if (doctor.isEmpty()){
-            throw new DoctorNotFoundException("Couldn't delete the doctor as no doctor with id: "+ id + " is found in the database.");
-        }
-        avalable_time_service.deleteAllRecordsByDoctorId(id);
-        excuseService.deleteAllRecordsByDoctorId(id);
-        appointmentService.deleteAllRecordsByDoctorId(id);
+        // Optional<Doctor> doctor = doctorService.getDoctorById(id);
+        // if (doctor.isEmpty()){
+        //     throw new DoctorNotFoundException("Couldn't delete the doctor as no doctor with id: "+ id + " is found in the database.");
+        // }
+        // avalable_time_service.deleteAllRecordsByDoctorId(id);
+        // excuseService.deleteAllRecordsByDoctorId(id);
+        // appointmentService.deleteAllRecordsByDoctorId(id);
         
-        doctorService.deleteDoctor(id);
+        // doctorService.deleteDoctor(id);
+         doctorClient.deleteDoctor(id);
     }
 
     // ===== Patient Management =====
     public PatientResponse addPatient(PatientRequest request) {
-        Patient patient = modelMapper.map(request, Patient.class);
-        Optional<Patient> savedPatient = patientService.getPatientRepository().findByEmailAndName(patient.getEmail(), patient.getName());
-        if (savedPatient.isPresent()){
-            throw new DuplicateEntryException("Patient with name: "+ patient.getName() + " and email: "+ patient.getEmail() + " is already present.");
-        }
+        // Patient patient = modelMapper.map(request, Patient.class);
+        // Optional<Patient> savedPatient = patientService.getPatientRepository().findByEmailAndName(patient.getEmail(), patient.getName());
+        // if (savedPatient.isPresent()){
+        //     throw new DuplicateEntryException("Patient with name: "+ patient.getName() + " and email: "+ patient.getEmail() + " is already present.");
+        // }
 				
-        return patientService.signUp(request);
+        // return patientService.signUp(request);
+        return patientClient.createPatient(request);
     }
 
-    public PatientResponse updatePatient(Integer id, PatientRequest request) {
-        return patientService.updateProfile(id, request);
+    public PatientResponse updatePatient( PatientRequest request) {
+        // return patientService.updateProfile(id, request);
+        return patientClient.updatePatient(request);
     }
 
     public void deletePatient(int id) {
-        appointmentService.deleteAllRecordsByPatient(id);
-        patientService.deletePatientById(id);
+        // appointmentService.deleteAllRecordsByPatient(id);
+        // patientService.deletePatientById(id);
+        patientClient.deletePatient(id);
     }
 }

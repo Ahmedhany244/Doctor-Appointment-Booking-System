@@ -1,4 +1,5 @@
-package com.global.hr.patient.Models;
+package com.global.hr.admin.entity;
+
 
 public enum Gender {
 	F("F"), M("M");
