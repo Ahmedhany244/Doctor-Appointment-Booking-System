@@ -7,12 +7,15 @@ import com.example.demo.Models.Gender;
 
 public class PatientResponse {
 	
+	private String token;
+	
 	private String name;
 	private String phone;
 	private String email;
 	private Gender gender;
 	private int age;
 	private List<Appointment> appointments;
+	
 	
 	public String getName() {
 		return name;
@@ -49,6 +52,12 @@ public class PatientResponse {
 	}
 	public void setAppointments(List<Appointment> appointments) {
 		this.appointments = appointments;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	// should remove password

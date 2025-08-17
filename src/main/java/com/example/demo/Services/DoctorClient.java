@@ -3,11 +3,16 @@ package com.example.demo.Services;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.example.demo.Exception.ResourceNotFoundException;
 import com.example.demo.Models.AvailableTime;
 import com.example.demo.Models.Day;
 import com.example.demo.Models.Doctor;
@@ -21,15 +26,17 @@ public class DoctorClient {
         this.restTemplate = restTemplate;
     }
 
-    public List<AvailableTime> getAvailableTime(Integer doctorId) {
+    public List<AvailableTime> getDoctorAvailableTime(Integer doctorId) {
     	
     	// a hardcoded url (don't use preferably) 	WRONG URL !!!
     	
-    	String url = "http://DOCTOR-SERVICE/{doctorId}/availability";
+    	String url = "http://DOCTOR-SERVICE/doctors/{doctorId}/availability";
     	// or can be written/used as the method below	using "UriComponentsBuilder"
 
 
     	AvailableTime[] times = restTemplate.getForObject(url, AvailableTime[].class , doctorId);
+    	if(times == null)
+    		throw new ResourceNotFoundException("available time is null");
     	return Arrays.asList(times);
         
         /*	can also use this if the returned a ResponseEntity (Http Response) as it should
@@ -44,6 +51,21 @@ public class DoctorClient {
          */
     }
    
+    public List<Doctor> getAllDoctors(String token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<List<Doctor>> response = restTemplate.exchange(
+            "http://DOCTOR-SERVICE/doctors",
+            HttpMethod.GET,
+            entity,
+            new ParameterizedTypeReference<List<Doctor>>() {}
+        );
+
+        return response.getBody();
+    }
+    
     public List<Doctor> getAllDoctors(){
     	
         String url = "http://DOCTOR-SERVICE/doctors";

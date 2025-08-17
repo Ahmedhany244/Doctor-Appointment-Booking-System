@@ -4,28 +4,22 @@ import java.time.LocalTime;
 
 public class AvailableTime {
 	
-	private int id;
-    private Doctor doctor;
-    private Day dayOfWeek;
-	
-	private LocalTime startTime;
-    public int getId() {
-		return id;
+    private int doctorId;
+    private String day;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    
+	public int getDoctorId() {
+		return doctorId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setDoctorId(int doctorId) {
+		this.doctorId = doctorId;
 	}
-	public Doctor getDoctor() {
-		return doctor;
+	public String getDay() {
+		return day;
 	}
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
-	}
-	public Day getDayOfWeek() {
-		return dayOfWeek;
-	}
-	public void setDayOfWeek(Day dayOfWeek) {
-		this.dayOfWeek = dayOfWeek;
+	public void setDay(String day) {
+		this.day = day;
 	}
 	public LocalTime getStartTime() {
 		return startTime;
@@ -39,13 +33,5 @@ public class AvailableTime {
 	public void setEndTime(LocalTime endTime) {
 		this.endTime = endTime;
 	}
-	public int getMax_Patients() {
-		return max_Patients;
-	}
-	public void setMax_Patients(int max_Patients) {
-		this.max_Patients = max_Patients;
-	}
-	private LocalTime endTime;
-    private int max_Patients;
-
+  
 }
