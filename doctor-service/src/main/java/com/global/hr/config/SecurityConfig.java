@@ -26,7 +26,7 @@ public class SecurityConfig {
     private String jwtSecret;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+     SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    JwtDecoder jwtDecoder) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/eureka/**").permitAll()
+                .requestMatchers("/internal/**").permitAll()
                 // Swagger (optional)
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 // everything else needs JWT:
@@ -47,8 +48,12 @@ public class SecurityConfig {
                     .jwtAuthenticationConverter(jwtAuthConverter())
                 )
             );
-
         return http.build();
+        /*
+    	http.csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()); 
+        return http.build();
+        */
     }
 
     // Map "roles" claim to ROLE_ authorities

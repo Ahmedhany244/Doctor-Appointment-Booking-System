@@ -1,9 +1,25 @@
 package com.global.hr.doctor.controller;
 
-import com.global.hr.doctor.entity.AvailableTime;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.global.hr.doctor.entity.DayOfWeek;
 import com.global.hr.doctor.entity.Doctor;
-import com.global.hr.doctor.entity.DoctorException;
 import com.global.hr.doctor.entity.ExcuseId;
 import com.global.hr.doctor.service.AppointmentClient;
 import com.global.hr.doctor.service.AvailableTimeService;
@@ -15,14 +31,6 @@ import com.global.hr.patient.DataTransferObjects.AvailabilityRequest;
 import com.global.hr.patient.DataTransferObjects.AvailabilityResponse;
 import com.global.hr.patient.DataTransferObjects.DoctorExceptionRequestDTO;
 import com.global.hr.patient.DataTransferObjects.DoctorExceptionResponseDTO;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/doctors")
@@ -36,6 +44,8 @@ public class DoctorController {
 	private ExcuseService excuseservice;
 	@Autowired
 	private AppointmentClient appointementclientService;
+	
+	Logger logger = LoggerFactory.getLogger(DoctorController.class);
 
 	// Get all doctors
 	@GetMapping
@@ -81,7 +91,10 @@ public class DoctorController {
 
 	@GetMapping("/{id}/availability")
     public ResponseEntity<List<AvailabilityResponse>> getDoctorAvailability(@PathVariable Integer id) {
+		/*
         List<AvailabilityResponse> availability = availableservice.getDoctorAvailability(id);
+        */
+		List<AvailabilityResponse> availability = this.availableservice.getAvailabilityByDoctorId(id);
         return ResponseEntity.ok(availability);
     }
 
@@ -115,5 +128,24 @@ public class DoctorController {
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
+	}
+	
+	@GetMapping("/filterdoctors")
+	public ResponseEntity<List<Doctor>> filterDoctors(
+	        @RequestParam(required = false) String name,
+	        @RequestParam(required = false) String specialization,
+	        @RequestParam(required = false) String gender,
+	        @RequestParam(required = false) String address) {
+		List<Doctor> response = doctorService.filterDoctors(name, specialization, gender, address);
+		logger.info(response.toString());
+	    return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	
+	@GetMapping("/findmaxpatients")
+	public ResponseEntity<Integer> findMaxPatients(@RequestParam(required = true) Integer id, 
+			@RequestParam(required = true) String available_day) {
+	    return ResponseEntity.status(HttpStatus.OK).body(
+		 this.availableservice.DoctorMaxPatients(id, available_day)
+		 );
 	}
 }

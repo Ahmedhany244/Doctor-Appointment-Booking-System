@@ -4,24 +4,27 @@ import java.time.LocalTime;
 
 import com.global.hr.doctor.entity.DayOfWeek;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AvailabilityResponse {
 	private int id;
     private int doctorId;
-    private DayOfWeek day;
+    private String day;
     private LocalTime startTime;
     private LocalTime endTime;
     public AvailabilityResponse() {
     }
 
     // Parameterized constructor
-    public AvailabilityResponse(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
-        this.day= dayOfWeek;
+    public AvailabilityResponse(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime,int doctorId) {
+        this.setDay(dayOfWeek);
         this.startTime = startTime;
         this.endTime = endTime;
+        this.doctorId = doctorId;
     }
     
     // getters & setters
@@ -37,12 +40,6 @@ public class AvailabilityResponse {
     public void setDoctorId(int doctorId) {
         this.doctorId = doctorId;
     }
-    public DayOfWeek getDay() {
-        return day;
-    }
-    public void setDay(DayOfWeek day) {
-        this.day = day;
-    }
     public LocalTime getStartTime() {
         return startTime;
     }
@@ -57,5 +54,14 @@ public class AvailabilityResponse {
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
+
+
+	public String getDay() {
+		return day;
+	}
+
+	public void setDay(DayOfWeek day) {
+		this.day = day.toString();
+	}
     
 }

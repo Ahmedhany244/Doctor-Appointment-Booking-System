@@ -55,5 +55,18 @@ public class DoctorService {
 			throw new RuntimeException("Doctor not found with id " + id);
 		}
 	}
+	/*
+	public List<Doctor> filterDoctors(String name,String specialization,
+			String gender,String address){
+		return doctorRepo.findByFilters(name, specialization, gender, address);
+	}
+	*/
+	public List<Doctor> filterDoctors(String name,String specialization,
+			String gender,String address){
+	return doctorRepo.findAll(
+	        DoctorSpecification.filterBy(name, specialization, gender, address)
+	    );
+	}
+
 
 }

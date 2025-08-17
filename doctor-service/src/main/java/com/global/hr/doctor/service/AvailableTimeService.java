@@ -1,25 +1,21 @@
 package com.global.hr.doctor.service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.global.hr.doctor.entity.AvailableTime;
-import com.global.hr.doctor.entity.Doctor;
-import com.global.hr.doctor.repository.AvailableTimeRepository;
-import com.global.hr.doctor.repository.DoctorRepo;
-import com.global.hr.exception.DoctorNotFoundException;
-import com.global.hr.patient.DataTransferObjects.AvailabilityRequest;
-import com.global.hr.patient.DataTransferObjects.AvailabilityResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.global.hr.doctor.entity.AvailableTime;
+import com.global.hr.doctor.entity.Doctor;
+import com.global.hr.doctor.entity.DoctorException;
+import com.global.hr.doctor.repository.AvailableTimeRepository;
+import com.global.hr.doctor.repository.DoctorRepo;
+import com.global.hr.exception.DoctorNotFoundException;
+import com.global.hr.exception.ResourceNotFoundException;
+import com.global.hr.patient.DataTransferObjects.AvailabilityRequest;
+import com.global.hr.patient.DataTransferObjects.AvailabilityResponse;
 @Service
 public class AvailableTimeService {
 	// menf3sh final m3 auto l2n auto injection dh b3d m3 create lkn final deh w enta btcreate fi constructor
@@ -29,6 +25,9 @@ public class AvailableTimeService {
     private DoctorService doctorService;
 	@Autowired
 	private DoctorRepo doctorRepo;
+	
+	@Autowired
+	private ExcuseService excuseService;
 	
 	    public AvailableTime save(AvailableTime availableTime) {
 	        return availableTimeRepository.save(availableTime);
@@ -64,7 +63,7 @@ public class AvailableTimeService {
 	        List<AvailableTime> availabilityList = availableTimeRepository.findByDoctor(doctor);
 
 	        return availabilityList.stream()
-	                .map(a -> new AvailabilityResponse(a.getDayOfWeek(), a.getStartTime(), a.getEndTime()))
+	                .map(a -> new AvailabilityResponse(a.getDayOfWeek(), a.getStartTime(), a.getEndTime(),a.getDoctor().getId()))
 	                .collect(Collectors.toList());
 	    }
 	    
@@ -72,10 +71,44 @@ public class AvailableTimeService {
 	    public List<AvailableTime> findAll() {
 	        return availableTimeRepository.findAll();
 	    }
-	    public List<AvailableTime> getAvailabilityByDoctor(Doctor doctor) {
-	        return availableTimeRepository.findByDoctor(doctor);
-	    }
+	    public List<AvailabilityResponse> getAvailabilityByDoctor(Doctor doctor) {
+	        List<AvailableTime> times = availableTimeRepository.findByDoctor(doctor);
 
+	        //Get doctor excuses
+	        List<DoctorException> excuses = excuseService.getExcusesByDoctor(doctor);
+
+	        //Filter out times where doctor has an excuse
+	        List<AvailableTime> availabilityList =  times.stream()
+	                .filter(time -> excuses.stream()
+	                    .noneMatch(excuse -> excuse.getExcuseDay().toString().equals(time.getDayOfWeek().toString())))
+	                .toList();
+	        
+	        return availabilityList.stream()
+	                .map(a -> new AvailabilityResponse(a.getDayOfWeek(), a.getStartTime(), a.getEndTime(),a.getDoctor().getId()))
+	                .collect(Collectors.toList());
+	    }
+	    public List<AvailabilityResponse> getAvailabilityByDoctorId(Integer id) {
+	    	
+	    	Doctor doctor = this.doctorService.getDoctorById(id).orElseThrow(() 
+	    			-> new ResourceNotFoundException("No Doctor with id " + id));
+	    			
+	    	
+	        List<AvailableTime> times = availableTimeRepository.findByDoctor(doctor);
+
+	        //Get doctor excuses
+	        List<DoctorException> excuses = excuseService.getExcusesByDoctor(doctor);
+
+	        //Filter out times where doctor has an excuse
+	        List<AvailableTime> availabilityList = times.stream()
+	                .filter(time -> excuses.stream()
+	                    .noneMatch(excuse -> excuse.getExcuseDay().toString().equals(time.getDayOfWeek().toString())))
+	                .toList();
+	        
+	        return availabilityList.stream()
+	                .map(a -> new AvailabilityResponse(a.getDayOfWeek(), a.getStartTime(), a.getEndTime(),a.getDoctor().getId()))
+	                .collect(Collectors.toList());
+	        
+	    }
 	    public Optional<AvailableTime> findById(Integer id) {
 	        return availableTimeRepository.findById(id);
 	    }
@@ -118,6 +151,9 @@ public class AvailableTimeService {
 	    	return ResponseEntity.notFound().build();
 	    	
 	        
+	    }
+	    public Integer DoctorMaxPatients(Integer id, String day) {
+	    	 return this.availableTimeRepository.findMaxPatients(id, day);
 	    }
 
 }
